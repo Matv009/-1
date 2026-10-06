@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>МИС</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>МИС «Здоровье»</h1></header>
+<nav><ul><li><a href="#p">Пациенты</a></li><li><a href="#a">Приёмы</a></li><li><a href="#d">Диагнозы</a></li><li><a href="#r">Назначения</a></li></ul></nav>
+<main>
+<section id="p"><h2>Пациенты</h2><ul id="pl"></ul></section>
+<section id="a"><h2>Приёмы</h2><ul id="al"></ul></section>
+<section id="d"><h2>Диагнозы</h2><ul id="dl"></ul></section>
+<section id="r"><h2>Назначения</h2>
+<table><caption>Назначения</caption>
+<thead><tr><th scope="col">Препарат</th><th scope="col">Пациент</th><th scope="col">Доза</th><th scope="col">Дата</th></tr></thead>
+<tbody id="rt"></tbody></table></section>
+</main>
+<aside><h2>Сводка</h2><p>Пациентов: 15</p><p>Приёмов: 15</p><p>Диагнозов: 15</p><p>Назначений: 15</p></aside>
+<footer><address><a href="mailto:info@mis.ru">info@mis.ru</a></address><p>© <time datetime="2026">2026</time></p></footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>
