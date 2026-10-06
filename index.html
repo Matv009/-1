@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>МИС</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header><h1>МИС «Здоровье»</h1></header>
-<nav><ul><li><a href="#p">Пациенты</a></li><li><a href="#a">Приёмы</a></li><li><a href="#d">Диагнозы</a></li><li><a href="#r">Назначения</a></li></ul></nav>
+<!DOCTYPE html><html lang=ru><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>МИС</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel=stylesheet><link rel=stylesheet href=style.css></head><body>
+<header><h1>МИС</h1></header>
+<nav><ul><li><a href=#p>Пациенты<li><a href=#a>Приёмы<li><a href=#d>Диагнозы<li><a href=#r>Назначения</ul></nav>
 <main>
-<section id="p"><h2>Пациенты</h2><ul id="pl"></ul></section>
-<section id="a"><h2>Приёмы</h2><ul id="al"></ul></section>
-<section id="d"><h2>Диагнозы</h2><ul id="dl"></ul></section>
-<section id="r"><h2>Назначения</h2>
-<table><caption>Назначения</caption>
-<thead><tr><th scope="col">Препарат</th><th scope="col">Пациент</th><th scope="col">Доза</th><th scope="col">Дата</th></tr></thead>
-<tbody id="rt"></tbody></table></section>
+<form id=f>
+<label>Поиск<input name=q type=search></label>
+<label>Статус<select name=st><option value="">Все<option>active<option>completed<option>cancelled</select></label>
+<fieldset><legend>Приоритет</legend><label class=ck><input type=checkbox name=pr value=high><span>Высокий</span></label><label class=ck><input type=checkbox name=pr value=mid><span>Средний</span></label><label class=ck><input type=checkbox name=pr value=low><span>Низкий</span></label></fieldset>
+<fieldset><legend>Вид</legend><label class=rd><input type=radio name=v value=cards checked><span>Карточки</span></label><label class=rd><input type=radio name=v value=table><span>Таблица</span></label></fieldset>
+<button class=btn>Сброс</button>
+</form>
+<section id=p><h2>Пациенты</h2><ul id=pl class=cards></ul></section>
+<section id=a><h2>Приёмы</h2><ul id=al class=cards></ul></section>
+<section id=d><h2>Диагнозы</h2><ul id=dl class=cards></ul></section>
+<section id=r><h2>Назначения</h2><table><caption>Назначения</caption><thead><tr><th scope=col data-k=medication>Препарат<th scope=col data-k=patient>Пациент<th scope=col data-k=dosage>Доза<th scope=col data-k=date>Дата</thead><tbody id=rt></tbody></table></section>
 </main>
-<aside><h2>Сводка</h2><p>Пациентов: 15</p><p>Приёмов: 15</p><p>Диагнозов: 15</p><p>Назначений: 15</p></aside>
-<footer><address><a href="mailto:info@mis.ru">info@mis.ru</a></address><p>© <time datetime="2026">2026</time></p></footer>
-<script type="module" src="app.js"></script>
-</body>
-</html>
+<aside><h2>Сводка</h2><p>Пациентов: 15<p>Приёмов: 15<p>Диагнозов: 15<p>Назначений: 15<button class=btn disabled>Экспорт</button></aside>
+<footer><address><a href=mailto:info@mis.ru>info@mis.ru</a></address><p>© <time datetime=2026>2026</time></footer>
+<dialog id=m><article><header><h2 id=mt>—</h2><button class=bx aria-label=Закрыть>×</button></header><div id=mb></div><footer><button class=btn data-c>Отмена</button><button class="btn pri" data-c>OK</button></footer></article></dialog>
+<script type=module src=app.js></script></body></html>
