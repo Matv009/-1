@@ -1,20 +1,117 @@
-<!DOCTYPE html><html lang=ru><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>МИС</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel=stylesheet><link rel=stylesheet href=style.css></head><body>
-<header><h1>МИС</h1></header>
-<nav><ul><li><a href=#p>Пациенты<li><a href=#a>Приёмы<li><a href=#d>Диагнозы<li><a href=#r>Назначения</ul></nav>
-<main>
-<form id=f>
-<label>Поиск<input name=q type=search></label>
-<label>Статус<select name=st><option value="">Все<option>active<option>completed<option>cancelled</select></label>
-<fieldset><legend>Приоритет</legend><label class=ck><input type=checkbox name=pr value=high><span>Высокий</span></label><label class=ck><input type=checkbox name=pr value=mid><span>Средний</span></label><label class=ck><input type=checkbox name=pr value=low><span>Низкий</span></label></fieldset>
-<fieldset><legend>Вид</legend><label class=rd><input type=radio name=v value=cards checked><span>Карточки</span></label><label class=rd><input type=radio name=v value=table><span>Таблица</span></label></fieldset>
-<button class=btn>Сброс</button>
-</form>
-<section id=p><h2>Пациенты</h2><ul id=pl class=cards></ul></section>
-<section id=a><h2>Приёмы</h2><ul id=al class=cards></ul></section>
-<section id=d><h2>Диагнозы</h2><ul id=dl class=cards></ul></section>
-<section id=r><h2>Назначения</h2><table><caption>Назначения</caption><thead><tr><th scope=col data-k=medication>Препарат<th scope=col data-k=patient>Пациент<th scope=col data-k=dosage>Доза<th scope=col data-k=date>Дата</thead><tbody id=rt></tbody></table></section>
-</main>
-<aside><h2>Сводка</h2><p>Пациентов: 15<p>Приёмов: 15<p>Диагнозов: 15<p>Назначений: 15<button class=btn disabled>Экспорт</button></aside>
-<footer><address><a href=mailto:info@mis.ru>info@mis.ru</a></address><p>© <time datetime=2026>2026</time></footer>
-<dialog id=m><article><header><h2 id=mt>—</h2><button class=bx aria-label=Закрыть>×</button></header><div id=mb></div><footer><button class=btn data-c>Отмена</button><button class="btn pri" data-c>OK</button></footer></article></dialog>
-<script type=module src=app.js></script></body></html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МИС «МедЭксперт» — Автоматизированное рабочее место врача</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="app-layout">
+
+  <!-- БОКОВАЯ НАВИГАЦИЯ -->
+  <nav class="app-sidebar" aria-label="Главное меню МИС">
+    <figure class="brand-badge">
+      <img
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z'/%3E%3C/svg%3E"
+        alt="Эмблема медицинской информационной системы МедЭксперт"
+        width="36"
+        height="36">
+      <figcaption class="brand-title">МИС МедЭксперт</figcaption>
+    </figure>
+
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="#appointments-section" class="nav-link active" aria-current="page">Журнал приёмов</a>
+      </li>
+      <li class="nav-item">
+        <a href="#diagnoses-section" class="nav-link">Клинические диагнозы</a>
+      </li>
+      <li class="nav-item">
+        <a href="#patients-section" class="nav-link">Регистр пациентов</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ШАПКА -->
+  <header class="app-header">
+    <hgroup class="header-content">
+      <h1 class="header-heading">Рабочее место врача-терапевта</h1>
+      <p class="header-caption">
+        Текущая клиническая смена:
+        <time datetime="2026-10-06">06 октября 2026 года</time>
+      </p>
+    </hgroup>
+  </header>
+
+  <!-- ОСНОВНАЯ ОБЛАСТЬ -->
+  <main class="app-main">
+
+    <!-- СЕКЦИЯ 1: ТАБЛИЦА ПРИЁМОВ ВРАЧА -->
+    <section id="appointments-section" class="dashboard-block" aria-labelledby="appointments-title">
+      <header class="block-header">
+        <h2 id="appointments-title" class="block-title">Журнал врачебных приёмов</h2>
+        <p class="block-subtitle">Расписание консультаций, статус явки, кабинеты и назначения</p>
+      </header>
+
+      <table class="data-table" id="appointments-table">
+        <caption class="table-caption">
+          Электронный протокол приёмов амбулаторного отделения (15 записей)
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Талон / Номер</th>
+            <th scope="col">Дата и время</th>
+            <th scope="col">ФИО Пациента</th>
+            <th scope="col">Цель обращения</th>
+            <th scope="col">Специалист / Кабинет</th>
+            <th scope="col">Первичные назначения</th>
+            <th scope="col">Тип оплаты</th>
+            <th scope="col">Статус приёма</th>
+          </tr>
+        </thead>
+        <tbody id="appointments-table-body">
+          <!-- Генерируется через JS без innerHTML -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- СЕКЦИЯ 2: КАРТОЧКИ КЛИНИЧЕСКИХ ДИАГНОЗОВ -->
+    <section id="diagnoses-section" class="dashboard-block" aria-labelledby="diagnoses-title">
+      <header class="block-header">
+        <h2 id="diagnoses-title" class="block-title">Реестр клинических диагнозов</h2>
+        <p class="block-subtitle">Коды по МКБ-10, схемы терапии и динамика диспансерного наблюдения</p>
+      </header>
+      <ul id="diagnoses-grid" class="cards-grid" aria-label="Сетка подтвержденных диагнозов">
+        <!-- Генерируется через JS без innerHTML -->
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- ДОПОЛНИТЕЛЬНАЯ БОКОВАЯ ПАНЕЛЬ: РЕГИСТР ПАЦИЕНТОВ -->
+  <aside id="patients-section" class="app-extra-panel" aria-labelledby="patients-title">
+    <header class="extra-panel-header">
+      <h2 id="patients-title" class="extra-panel-title">Регистр пациентов</h2>
+      <p class="extra-panel-subtitle">Электронные медицинские карты и полисы ОМС/ДМС</p>
+    </header>
+    <ul id="patients-stack" class="patients-stack" aria-label="Список пациентов поликлиники">
+      <!-- Генерируется через JS без innerHTML -->
+    </ul>
+  </aside>
+
+  <!-- ПОДВАЛ С АДРЕСОМ -->
+  <footer class="app-footer">
+    <address class="footer-contacts">
+      ГБУЗ «Городская поликлиника № 12» • Москва, Ленинский проспект, д. 28 • Регистратура: 
+      <a href="tel:+74957654321">+7 (495) 765-43-21</a> • 
+      <a href="mailto:info@gp12-mos.ru">info@gp12-mos.ru</a>
+    </address>
+    <p class="footer-copyright">
+      © <time datetime="2026">2026</time> Единая медицинская информационно-аналитическая система (ЕМИАС).
+    </p>
+  </footer>
+
+  <!-- МОДУЛЬ ПРИЛОЖЕНИЯ -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

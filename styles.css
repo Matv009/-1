@@ -1,0 +1,385 @@
+/* ==========================================================================
+   1. СОВРЕМЕННЫЙ CSS RESET (БЕЗ * { margin:0; padding:0; })
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+figcaption,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+body {
+  min-height: 100vh;
+  line-height: var(--lh-normal);
+  font-family: var(--font-family-base);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   2. ДИЗАЙН-ТОКЕНЫ В :ROOT (26 CSS-ПЕРЕМЕННЫХ)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* 1. Семейство шрифтов и 6 размеров */
+  --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-xs: 0.75rem;    /* 12px */
+  --font-sm: 0.875rem;   /* 14px */
+  --font-md: 1rem;       /* 16px */
+  --font-lg: 1.125rem;   /* 18px */
+  --font-xl: 1.375rem;   /* 22px */
+  --font-2xl: 1.625rem;  /* 26px */
+
+  /* Интервалы и трекинг */
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
+  --ls-tight: -0.02em;
+  --ls-normal: 0;
+  --ls-wide: 0.04em;
+
+  /* 2. Цвета фонов (3 уровня) */
+  --bg-base: #f0fdf4;               /* Уровень 1: Мягкий медицинский фон */
+  --bg-surface: #ffffff;            /* Уровень 2: Карточки, сайдбар */
+  --bg-surface-elevated: #e2fbe8;   /* Уровень 3: Акцентные блоки */
+
+  /* 3. Цвета текста (3 уровня) */
+  --text-primary: #0f172a;          /* Основной текст */
+  --text-secondary: #334155;        /* Второстепенный текст */
+  --text-muted: #64748b;            /* Приглушенные подписи */
+
+  /* 4. Цвета границ (2 уровня) */
+  --border-subtle: #cbd5e1;
+  --border-strong: #94a3b8;
+
+  /* 5. Акцентный цвет */
+  --color-accent: #0284c7;
+
+  /* 6. Цвета состояний */
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-error: #b91c1c;
+  --color-info: #0369a1;
+
+  /* 7. 6 шагов отступов (от 4px до 48px) */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+
+  /* 8. 4 радиуса скругления */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* 9. 3 уровня теней */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   3. ГЛОБАЛЬНЫЙ CSS GRID LAYOUT
+   ========================================================================== */
+.app-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr 320px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "sidebar header extra"
+    "sidebar main   extra"
+    "sidebar footer extra";
+  min-height: 100vh;
+}
+
+/* Боковая панель */
+.app-sidebar {
+  grid-area: sidebar;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  padding: var(--space-md) var(--space-sm);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nav-link {
+  display: block;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: var(--bg-surface-elevated);
+  color: var(--color-accent);
+}
+
+/* Шапка */
+.app-header {
+  grid-area: header;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.header-heading {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+}
+
+.header-caption {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-top: var(--space-2xs);
+}
+
+/* Основная область */
+.app-main {
+  grid-area: main;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.dashboard-block {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.block-header {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.block-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+  letter-spacing: var(--ls-tight);
+}
+
+.block-subtitle {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-top: var(--space-2xs);
+}
+
+/* Таблица приёмов */
+.table-caption {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  text-align: left;
+  margin-bottom: var(--space-xs);
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  font-size: var(--font-sm);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table th {
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: var(--ls-tight);
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--bg-base);
+}
+
+/* Сетка карточек диагнозов */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-sm);
+}
+
+.diagnosis-card {
+  background-color: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.diagnosis-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+}
+
+.diagnosis-desc {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.diagnosis-meta {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+}
+
+/* Дополнительная боковая панель (Пациенты) */
+.app-extra-panel {
+  grid-area: extra;
+  background-color: var(--bg-surface);
+  border-left: 1px solid var(--border-subtle);
+  padding: var(--space-md) var(--space-sm);
+  overflow-y: auto;
+}
+
+.extra-panel-header {
+  margin-bottom: var(--space-md);
+}
+
+.extra-panel-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+}
+
+.extra-panel-subtitle {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-top: var(--space-2xs);
+}
+
+.patients-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.patient-card {
+  background-color: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.patient-name {
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.patient-text {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+/* Бейджи статусов */
+.status-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  margin-top: var(--space-2xs);
+}
+
+.status-badge--success { background-color: #dcfce7; color: var(--color-success); }
+.status-badge--warning { background-color: #fef3c7; color: var(--color-warning); }
+.status-badge--error   { background-color: #fee2e2; color: var(--color-error); }
+.status-badge--info    { background-color: #e0f2fe; color: var(--color-info); }
+
+/* Подвал */
+.app-footer {
+  grid-area: footer;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.footer-contacts {
+  font-style: normal;
+  margin-bottom: var(--space-2xs);
+}
+
+.footer-contacts a {
+  color: var(--color-accent);
+}
