@@ -4,6 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>МИС «МедЭксперт» — Автоматизированное рабочее место врача</title>
+
+  <!-- КРИТИЧЕСКИ ВАЖНО: применяем тему ДО рендера DOM (анти-FOUC) -->
+  <script>
+    (function () {
+      var THEME_KEY = 'mis-theme';
+      var ACCENT_KEY = 'mis-accent';
+      var root = document.documentElement;
+
+      function hexToRgb(hex) {
+        var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+      }
+
+      // 1. Тема: сохранённая вручную → иначе системная
+      var saved = null;
+      try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+      var theme = saved;
+      if (theme !== 'light' && theme !== 'dark' && theme !== 'solarized') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      root.setAttribute('data-theme', theme);
+
+      // 2. Акцентный цвет
+      var accent = null;
+      try { accent = localStorage.getItem(ACCENT_KEY); } catch (e) {}
+      if (accent && hexToRgb(accent)) {
+        var rgb = hexToRgb(accent);
+        root.style.setProperty('--accent', accent);
+        root.style.setProperty('--accent-rgb', rgb.join(', '));
+      }
+    })();
+  </script>
+
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body class="app-layout">
@@ -14,8 +47,7 @@
       <img
         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z'/%3E%3C/svg%3E"
         alt="Эмблема медицинской информационной системы МедЭксперт"
-        width="36"
-        height="36">
+        width="36" height="36">
       <figcaption class="brand-title">МИС МедЭксперт</figcaption>
     </figure>
 
@@ -41,6 +73,35 @@
         <time datetime="2026-10-06">06 октября 2026 года</time>
       </p>
     </hgroup>
+
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ ТЕМОЙ -->
+    <div class="theme-toolbar" role="group" aria-label="Настройки оформления">
+
+      <!-- Переключатель темы -->
+      <div class="theme-switcher" role="radiogroup" aria-label="Выбор темы">
+        <button type="button" class="theme-btn" data-theme-value="light"     role="radio" aria-checked="false" title="Светлая тема">
+          <span aria-hidden="true">☀</span><span class="visually-hidden">Светлая</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme-value="dark"      role="radio" aria-checked="false" title="Тёмная тема">
+          <span aria-hidden="true">☾</span><span class="visually-hidden">Тёмная</span>
+        </button>
+        <button type="button" class="theme-btn" data-theme-value="solarized" role="radio" aria-checked="false" title="Тема Solarized">
+          <span aria-hidden="true">◐</span><span class="visually-hidden">Solarized</span>
+        </button>
+      </div>
+
+      <!-- Динамический акцентный цвет -->
+      <label class="accent-picker" title="Акцентный цвет интерфейса">
+        <span class="visually-hidden">Акцентный цвет</span>
+        <input type="color" id="accent-color" name="accent-color" value="#0284c7" aria-label="Выбор акцентного цвета">
+      </label>
+
+      <!-- Сброс к системной теме -->
+      <button type="button" class="theme-reset" id="theme-reset" title="Вернуть системную тему">
+        <span aria-hidden="true">↺</span><span class="visually-hidden">Системная тема</span>
+      </button>
+
+    </div>
   </header>
 
   <!-- ОСНОВНАЯ ОБЛАСТЬ -->
@@ -69,9 +130,7 @@
             <th scope="col">Статус приёма</th>
           </tr>
         </thead>
-        <tbody id="appointments-table-body">
-          <!-- Генерируется через JS без innerHTML -->
-        </tbody>
+        <tbody id="appointments-table-body"></tbody>
       </table>
     </section>
 
@@ -81,9 +140,7 @@
         <h2 id="diagnoses-title" class="block-title">Реестр клинических диагнозов</h2>
         <p class="block-subtitle">Коды по МКБ-10, схемы терапии и динамика диспансерного наблюдения</p>
       </header>
-      <ul id="diagnoses-grid" class="cards-grid" aria-label="Сетка подтвержденных диагнозов">
-        <!-- Генерируется через JS без innerHTML -->
-      </ul>
+      <ul id="diagnoses-grid" class="cards-grid" aria-label="Сетка подтвержденных диагнозов"></ul>
     </section>
 
   </main>
@@ -94,16 +151,14 @@
       <h2 id="patients-title" class="extra-panel-title">Регистр пациентов</h2>
       <p class="extra-panel-subtitle">Электронные медицинские карты и полисы ОМС/ДМС</p>
     </header>
-    <ul id="patients-stack" class="patients-stack" aria-label="Список пациентов поликлиники">
-      <!-- Генерируется через JS без innerHTML -->
-    </ul>
+    <ul id="patients-stack" class="patients-stack" aria-label="Список пациентов поликлиники"></ul>
   </aside>
 
-  <!-- ПОДВАЛ С АДРЕСОМ -->
+  <!-- ПОДВАЛ -->
   <footer class="app-footer">
     <address class="footer-contacts">
-      ГБУЗ «Городская поликлиника № 12» • Москва, Ленинский проспект, д. 28 • Регистратура: 
-      <a href="tel:+74957654321">+7 (495) 765-43-21</a> • 
+      ГБУЗ «Городская поликлиника № 12» • Москва, Ленинский проспект, д. 28 • Регистратура:
+      <a href="tel:+74957654321">+7 (495) 765-43-21</a> •
       <a href="mailto:info@gp12-mos.ru">info@gp12-mos.ru</a>
     </address>
     <p class="footer-copyright">
@@ -114,4 +169,17 @@
   <!-- МОДУЛЬ ПРИЛОЖЕНИЯ -->
   <script type="module" src="./js/app.js"></script>
 </body>
+<!-- МОДАЛЬНОЕ ОКНО -->
+<dialog id="m" aria-labelledby="mt" aria-modal="true">
+  <article>
+    <header>
+      <h2 id="mt">Заголовок</h2>
+      <button type="button" class="bx" aria-label="Закрыть">×</button>
+    </header>
+    <div id="mb"></div>
+    <footer>
+      <button type="button" class="btn-accent" data-c>Закрыть</button>
+    </footer>
+  </article>
+</dialog>
 </html>
